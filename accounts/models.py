@@ -8,6 +8,8 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     is_admin = models.BooleanField('Is admin', default=False)
     is_donor = models.BooleanField('Is donor', default=False)
+    is_available = models.BooleanField(
+        'Is available', default=False, null=True)
 
     objects = UserManager()
 
