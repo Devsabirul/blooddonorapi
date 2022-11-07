@@ -1,1 +1,1 @@
-web: gunicorn complateapi.wsgi --log-file -
+web: gunicorn .wsgi --log-file - --log-level debug
