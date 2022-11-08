@@ -51,7 +51,7 @@ class AccountsApi(APIView):
 class UserRegistrationView(APIView):
     def post(self, request, format=None):
         serializers = UserRegistrationSerializer(data=request.data)
-        if serializers.is_valid():
+        if serializers.is_valid(raise_exception=True):
             serializers.save()
             return Response({'status': 'success', 'msg': 'Account created successfully'}, status=status.HTTP_201_CREATED)
         return Response({'status': 'failed', 'errors': serializers.errors}, status=status.HTTP_409_CONFLICT)
