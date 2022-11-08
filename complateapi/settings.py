@@ -73,10 +73,10 @@ WSGI_APPLICATION = 'complateapi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dd3b5vfb9j8psr',
-        'USER': 'eenzmlvrrhrvid',
-        'PASSWORD': 'f07d60c58e48c66fa226fd2ac5a23cdb4471a6dbd7d33600c0bc1d087ed49ef1',
-        'HOST': 'ec2-44-195-132-31.compute-1.amazonaws.com',
+        'NAME': 'daeb8qfshfh58s',
+        'USER': 'vehsubtbqvamqp',
+        'PASSWORD': 'ebe3a42af58c1e69cddd3eeb04325daf3253a242612243becd994e6628101119',
+        'HOST': 'ec2-34-235-31-124.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
