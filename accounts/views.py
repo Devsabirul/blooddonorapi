@@ -54,7 +54,7 @@ class UserRegistrationView(APIView):
         if serializers.is_valid():
             serializers.save()
             return Response({'status': 'success', 'msg': 'Account created successfully'}, status=status.HTTP_201_CREATED)
-        return Response({'errors': 'something wrong'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'errors': 'something wrong'}, status=status.HTTP_409_CONFLICT)
 
 
 class UserLoginApiView(APIView):
