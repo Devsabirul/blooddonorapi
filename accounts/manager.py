@@ -9,7 +9,7 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError('Email is required')
         user = self.model(email=email, **extra_fields)
-        user.password = make_password(password)
+        user.set_password(user.password)
         user.save(using=self._db)
         return user
 
