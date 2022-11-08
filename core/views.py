@@ -39,7 +39,7 @@ class BloodDonorRegisterApiView(APIView):
             BloodDonor, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"msg": "Data Updated Successfully"})
+            return Response({'status': 'success', "msg": "Data Updated Successfully"})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, pk, format=None):
@@ -49,11 +49,11 @@ class BloodDonorRegisterApiView(APIView):
             BloodDonor, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({"msg": "Data Updated Successfully"})
+            return Response({'status': 'success', "msg": "Data Updated Successfully"})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         id = pk
         BloodDonor = DonorRegister.objects.get(pk=id)
         BloodDonor.delete()
-        return Response({"msg": "Data Deleted"})
+        return Response({'status': 'success', "msg": "Data Deleted"})
