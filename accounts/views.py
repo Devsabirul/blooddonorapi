@@ -1,9 +1,21 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from django.contrib import auth
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import *
 from .serializers import *
+
+# Generate Token manually
+
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
 
 
 class AccountsApi(APIView):
@@ -18,42 +30,13 @@ class AccountsApi(APIView):
         return Response({'status': 'success', "account": serializers.data}, status=200)
 
 
-'''
-    def put(self, request, pk, format=None):
-        id = pk
-        account = CustomUser.objects.get(pk=id)
-        serializer = UserSerializer(
-            account, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'status': 'success', "msg": "Data Updated Successfully"})
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def patch(self, request, pk, format=None):
-        id = pk
-        account = CustomUser.objects.get(pk=id)
-        serializer = UserSerializer(
-            account, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'status': 'success', "msg": "Data Updated Successfully"})
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        id = pk
-        account = CustomUser.objects.get(pk=id)
-        account.delete()
-        return Response({'status': 'success', "msg": "Data Deleted"})
-
-'''
-
-
 class UserRegistrationView(APIView):
     def post(self, request, format=None):
         serializers = UserRegistrationSerializer(data=request.data)
-        if serializers.is_valid(raise_exception=True):
-            serializers.save()
-            return Response({'status': 'success', 'msg': 'Account created successfully'}, status=status.HTTP_201_CREATED)
+        if serializers.is_valid():
+            user = serializers.save()
+            token = get_tokens_for_user(user)
+            return Response({'status': 'success', 'token': token, 'msg': 'Account created successfully'}, status=status.HTTP_201_CREATED)
         return Response({'status': 'failed', 'errors': serializers.errors}, status=status.HTTP_409_CONFLICT)
 
 
@@ -64,4 +47,7 @@ class UserLoginApiView(APIView):
             email = serializer.data.get('email')
             password = serializer.data.get('password')
             print(email, password)
+            user = authenticate(request, email=email, password=password)
+            print(user)
             return Response({'status': 'success', 'msg': 'Login success'}, status=status.HTTP_200_OK)
+            # return Response({'status': 'failed', 'errors': {'non_field_errors': ['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)

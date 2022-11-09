@@ -25,7 +25,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         password = attrs.get('password')
         password2 = attrs.pop('password2')
         if password != password2:
-            raise serializer.ValidationError(
+            raise serializers.ValidationError(
                 "Password and Confirm Password Does not match")
         return attrs
 
