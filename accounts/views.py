@@ -35,8 +35,7 @@ class UserRegistrationView(APIView):
         serializers = UserRegistrationSerializer(data=request.data)
         if serializers.is_valid():
             user = serializers.save()
-            token = get_tokens_for_user(user)
-            return Response({'status': 'success', 'token': token, 'msg': 'Account created successfully'}, status=status.HTTP_201_CREATED)
+            return Response({'status': 'success', 'msg': 'Account created successfully'}, status=status.HTTP_201_CREATED)
         return Response({'status': 'failed', 'errors': serializers.errors}, status=status.HTTP_409_CONFLICT)
 
 
@@ -46,8 +45,10 @@ class UserLoginApiView(APIView):
         if serializer.is_valid(raise_exception=True):
             email = serializer.data.get('email')
             password = serializer.data.get('password')
-            print(email, password)
             user = authenticate(request, email=email, password=password)
-            print(user)
-            return Response({'status': 'success', 'msg': 'Login success'}, status=status.HTTP_200_OK)
-            # return Response({'status': 'failed', 'errors': {'non_field_errors': ['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
+            if user is not None:
+                token = get_tokens_for_user(user)
+                return Response({'status': 'success', 'token': token, 'msg': 'Login success'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'status': 'failed', 'errors': {'non_field_errors': ['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'status': 'failed', 'errors': serializer.errors}, status=status.HTTP_404_NOT_FOUND)

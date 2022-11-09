@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 # custom user manager
+
+
 class UserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, is_donor, is_available, password=None, password2=None):
         """
@@ -42,6 +44,7 @@ class UserManager(BaseUserManager):
 
 # custom user model
 class CustomUser(AbstractBaseUser):
+    username = None
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
@@ -71,6 +74,10 @@ class CustomUser(AbstractBaseUser):
         "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
         return True
+
+    def save(self, *args, **kwargs):
+        self.username = self.email
+        return super().save(*args, **kwargs)
 
     @property
     def is_staff(self):

@@ -6,6 +6,5 @@ urlpatterns = [
          name="account api Get by id"),
     path('/account/register', UserRegistrationView.as_view(),
          name="Registration api"),
-
     path('/account/login', UserLoginApiView.as_view(), name="loginapi")
 ]
